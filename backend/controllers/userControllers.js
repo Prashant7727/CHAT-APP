@@ -2,6 +2,30 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
 
+//get user data
+const getData = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    if (users.length > 0) {
+      res.send(users);
+    } else {
+      res.send({ result: "no users found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+//GET CURRENT USER DATA
+
+const getCurrentUserData = async (req, res, next) => {
+  let result = await User.findById({ _id: req.params.id });
+  if (result) {
+    res.send(result);
+  } else {
+    res.send({ result: "no record" });
+  }
+};
+
 //@description     Get or Search all users
 //@route           GET /api/user?search=
 //@access          Public
@@ -82,4 +106,10 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allUsers, registerUser, authUser };
+module.exports = {
+  allUsers,
+  registerUser,
+  authUser,
+  getData,
+  getCurrentUserData,
+};
