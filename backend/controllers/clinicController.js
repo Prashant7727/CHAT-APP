@@ -2,8 +2,8 @@ const Clinic = require("../models/clinicModel");
 //post clinic data
 const postClinic = (req, res, next) => {
   const user = new Clinic(req.body);
-  const result = user.save();
-  res.send(result);
+  user.save();
+  res.send(req.body);
 };
 //get clinic data
 const getClinicData = async (req, res, next) => {

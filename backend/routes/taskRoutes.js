@@ -24,8 +24,8 @@ router.route("/tasks").get(protect, getTaskData);
 router.route("/tasks/status/:status").get(protect, getTaskByStatus);
 router.route("/getTaskDataLast30Days").get(protect, getTaskDataLast30Days);
 router.route("/getTaskDataLast7Days").get(protect, getTaskDataLast7Days);
-router.route("/tasks/filter").get(protect, getTaskByRole);
-//http://localhost:8000/tasks/filter?createdBy=B sir
+router.route("/").get(protect, getTaskByRole);
+//http://localhost:8000/task?createdBy=:id
 router.route("/tasks/:taskId/pause").put(protect, pauseTask);
 router.route("/tasks/:taskId/renew").put(protect, renewTask);
 router.route("/tasks/:taskId/result").put(protect, addResultFromComment);

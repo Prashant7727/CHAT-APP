@@ -45,8 +45,7 @@ const accessChat = asyncHandler(async (req, res) => {
       );
       res.status(200).json(FullChat);
     } catch (error) {
-      res.status(400);
-      throw new Error(error.message);
+      res.status(400).json({ error: "error" });
     }
   }
 });
@@ -69,8 +68,25 @@ const fetchChats = asyncHandler(async (req, res) => {
         res.status(200).send(results);
       });
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    res.status(400).json({ error: "error" });
+  }
+});
+const getGroupChat = asyncHandler(async (req, res) => {
+  try {
+    Chat.find({ isGroupChat: true , users: { $elemMatch: { $eq: req.user._id } } })
+      .populate("users", "-password")
+      .populate("authorId", "-password")
+      .populate("latestMessage")
+      .sort({ updatedAt: -1 })
+      .then(async (results) => {
+        results = await User.populate(results, {
+          path: "latestMessage.sender",
+          select: "name pic email",
+        });
+        res.status(200).send(results);
+      });
+  } catch (error) {
+    res.status(400).json({ error: "error" });
   }
 });
 
@@ -86,7 +102,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
   // const users1 = JSON.parse(req.body.users);
   console.log(users);
 
-  if (users.length <= 2) {
+  if (users.length < 2) {
     return res
       .status(400)
       .send("Minimum 2 users are required to form a group chat");
@@ -116,8 +132,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
 
     res.status(200).json(fullGroupChat);
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    res.status(400).json({ error: "error" });
   }
 });
 
@@ -140,8 +155,7 @@ const renameGroup = asyncHandler(async (req, res) => {
     .populate("authorId", "-password");
 
   if (!updatedChat) {
-    res.status(404);
-    throw new Error("Chat Not Found");
+    res.status(404).json({ error: "Chat not found" });
   } else {
     res.json(updatedChat);
   }
@@ -168,8 +182,7 @@ const removeFromGroup = asyncHandler(async (req, res) => {
     .populate("authorId", "-password");
 
   if (!removed) {
-    res.status(404);
-    throw new Error("Chat Not Found");
+    res.status(404).json({ error: "Chat not found" });
   } else {
     res.json(removed);
   }
@@ -196,8 +209,7 @@ const addToGroup = asyncHandler(async (req, res) => {
     .populate("authorId", "-password");
 
   if (!added) {
-    res.status(404);
-    throw new Error("Chat Not Found");
+    res.status(404).json({ error: "Chat not found" });
   } else {
     res.json(added);
   }
@@ -210,4 +222,5 @@ module.exports = {
   renameGroup,
   addToGroup,
   removeFromGroup,
+  getGroupChat,
 };
