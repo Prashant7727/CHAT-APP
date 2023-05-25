@@ -14,6 +14,7 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 
   var isChat = await Chat.find({
+    isGroupChat: false,
     $and: [
       { users: { $elemMatch: { $eq: req.user._id } } },
       { users: { $elemMatch: { $eq: userId } } },
@@ -32,6 +33,7 @@ const accessChat = asyncHandler(async (req, res) => {
   } else {
     var chatData = {
       title: "One to One Chat",
+      isGroupChat: false,
       users: [req.user._id, userId],
     };
 
@@ -56,6 +58,7 @@ const fetchChats = asyncHandler(async (req, res) => {
   try {
     Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
       .populate("users", "-password")
+      .populate("authorId", "-password")
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
       .then(async (results) => {
@@ -89,15 +92,15 @@ const createGroupChat = asyncHandler(async (req, res) => {
       .send("Minimum 2 users are required to form a group chat");
   }
 
-  users.push(req.user._id);
+  users.push(req.user);
 
   try {
     const groupChat = await Chat.create({
       title: req.body.title,
       description: req.body.description,
-
+      isGroupChat: true,
       users: users,
-      authorId: req.user._id,
+      authorId: req.user,
       count: "0",
     });
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
@@ -105,11 +108,11 @@ const createGroupChat = asyncHandler(async (req, res) => {
       .populate("authorId", "-password");
 
     // Add group chat to each user's chats
-    const userIds = users.map((user) => user._id);
-    await User.updateMany(
-      { _id: { $in: userIds } },
-      { $push: { chats: groupChat._id } }
-    );
+    // const userIds = users.map((user) => user._id);
+    // await User.updateMany(
+    //   { _id: { $in: userIds } },
+    //   { $push: { chats: groupChat._id } }
+    // );
 
     res.status(200).json(fullGroupChat);
   } catch (error) {
@@ -122,12 +125,12 @@ const createGroupChat = asyncHandler(async (req, res) => {
 // @route   PUT /api/chat/rename
 // @access  Protected
 const renameGroup = asyncHandler(async (req, res) => {
-  const { chatId, chatName } = req.body;
+  const { chatId, title } = req.body;
 
   const updatedChat = await Chat.findByIdAndUpdate(
     chatId,
     {
-      title: chatName,
+      title: title,
     },
     {
       new: true,

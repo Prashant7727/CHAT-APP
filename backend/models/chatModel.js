@@ -4,6 +4,7 @@ const chatModel = mongoose.Schema(
   {
     title: { type: String },
     description: { type: String },
+    isGroupChat: { type: Boolean, default: false },
 
     latestMessage: {
       type: mongoose.Schema.Types.ObjectId,

@@ -103,8 +103,8 @@ const GroupChatModal = ({ children }) => {
       const { data } = await axios.post(
         `http://localhost:5000/api/chat/group`,
         {
-          name: groupChatName,
-          users: JSON.stringify(selectedUsers.map((u) => u._id)),
+          title: groupChatName,
+          users: selectedUsers.map((u) => u._id),
         },
         config
       );
