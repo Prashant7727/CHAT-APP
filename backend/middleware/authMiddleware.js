@@ -22,12 +22,12 @@ const protect = asyncHandler(async (req, res, next) => {
       }
       next();
     } catch (error) {
-      res.status(401).json({ error: "Not authorized, token failed" });
+      res.status(401).json({ error: "Not authorized, token is expired or wrong" });
     }
   }
 
   if (!token) {
-    res.status(401).json({ error: " Not authorized, no token" });
+    res.status(401).json({ error: " Not authorized, Token can not be blank" });
   }
 });
 

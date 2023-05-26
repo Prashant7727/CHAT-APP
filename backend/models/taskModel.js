@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
     priority: { type: Number, enum: [2, 1, 0], default: 1 },
     status: { type: Number, enum: [2, 3, 4, 5, 6], default: 2 },
     multitask: { type: String, enum: ["Y", "N"], default: "N" },

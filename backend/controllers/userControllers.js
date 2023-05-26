@@ -47,45 +47,50 @@ const allUsers = asyncHandler(async (req, res) => {
 //@description     Register new user
 //@route           POST /api/user/
 //@access          Public
-const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, pic } = req.body;
+// const registerUser = asyncHandler(async (req, res) => {
+//   const { name, email, password, pic } = req.body;
 
-  if (!name || !email || !password) {
-    res.status(400).json({ error: "Please enter all the fields" });
-  }
+//   if (!name || !email || !password) {
+//     res.status(400).json({ error: "Please enter all the fields" });
+//   }
 
-  const userExists = await User.findOne({ email });
+//   const userExists = await User.findOne({ email });
 
-  if (userExists) {
-    res.status(400).json({ error: "User already exists" });
-  }
+//   if (userExists) {
+//     res.status(400).json({ error: "User already exists" });
+//   }
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    pic,
-  });
+//   const user = await User.create({
+//     name,
+//     email,
+//     password,
+//     pic,
+//   });
 
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      pic: user.pic,
-      token: generateToken(user._id),
-    });
-  } else {
-    res.status(400).json({ error: "User not found" });
-  }
-});
+//   if (user) {
+//     res.status(201).json({
+//       _id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       isAdmin: user.isAdmin,
+//       pic: user.pic,
+//       token: generateToken(user._id),
+//     });
+//   } else {
+//     res.status(400).json({ error: "User not found" });
+//   }
+// });
 
 //@description     Auth the user
 //@route           POST /api/users/login
 //@access          Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400).json({ error: "Bad request" });
+    return;
+  }
 
   const user = await User.findOne({ email });
 
@@ -99,17 +104,18 @@ const authUser = asyncHandler(async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
-      res.status(403).json({ error: "Invalid password" });
+      res.status(401).json({ error: "Invalid password" });
     }
   } else {
-    res.status(401).json({ error: "Invalid email " });
+    res.status(401).json({ error: "Invalid email" });
   }
 });
 
 
+
 module.exports = {
   allUsers,
-  registerUser,
+  // registerUser,
   authUser,
   getData,
   getCurrentUserData,

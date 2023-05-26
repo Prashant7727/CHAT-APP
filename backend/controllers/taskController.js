@@ -200,7 +200,7 @@ const getTaskDataLast7Days = async (req, res) => {
       .json({ error: "Failed to retrieve task data", details: error.message });
   }
 };
-
+//filter by createdBy, responsible, participant, observers
 const getTaskByRole = async (req, res) => {
   const { createdBy, responsible, participant, observers } = req.query;
   try {
