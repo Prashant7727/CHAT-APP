@@ -252,7 +252,7 @@ const pauseTask = async (req, res) => {
     task.status = 2; // Set status to "Pending"
     const pausedTask = await task.save();
 
-    res.status(200).json({success: "task paused"});
+    res.status(200).json({success: "Task paused"});
   } catch (error) {
     res.status(500).json({ error: "Failed to pause the task" });
   }
@@ -273,7 +273,7 @@ const renewTask = async (req, res) => {
     task.closedOn = null; // Reset closedOn to null
     const renewedTask = await task.save();
 
-    res.status(200).json({success: "task renewed"});
+    res.status(200).json({success: "Task renewed"});
   } catch (error) {
     res.status(500).json({ error: "Failed to renew the task" });
   }
