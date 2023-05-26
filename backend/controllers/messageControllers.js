@@ -47,7 +47,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   
     await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
   
-    res.json(message);
+    res.status(200).json({status:"message sent successfully"});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "An error occurred while sending the message" });

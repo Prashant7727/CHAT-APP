@@ -43,7 +43,7 @@ const accessChat = asyncHandler(async (req, res) => {
         "users",
         "-password"
       );
-      res.status(200).json(FullChat);
+      res.status(200).json({status:"ok"});
     } catch (error) {
       res.status(400).json({ error: "error" });
     }
@@ -130,7 +130,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
     //   { $push: { chats: groupChat._id } }
     // );
 
-    res.status(200).json(fullGroupChat);
+    res.status(200).json({status:"Group created Successfully"});
   } catch (error) {
     res.status(400).json({ error: "error" });
   }
@@ -211,7 +211,7 @@ const addToGroup = asyncHandler(async (req, res) => {
   if (!added) {
     res.status(404).json({ error: "Chat not found" });
   } else {
-    res.json(added);
+    res.json({status:"User added successfully to the group"});
   }
 });
 

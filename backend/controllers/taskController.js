@@ -9,7 +9,7 @@ const addTask = async (req, res) => {
     taskData.createdBy = loggedInUserId; // Set the createdBy field with the user ID
     const task = new Task(taskData);
     const savedTask = await task.save();
-    res.status(201).json(savedTask);
+    res.status(201).json({status: "Task added Successfully"});
   } catch (error) {
     res.status(500).json({ error: "Failed to create the task" });
   }
@@ -28,7 +28,7 @@ const completeTask = async (req, res) => {
     task.status = 5; // Set status to "Completed"
     const completedTask = await task.save();
 
-    res.status(200).json(completedTask);
+    res.status(200).json({status: "task completed"});
   } catch (error) {
     res.status(500).json({ error: "Failed to complete the task" });
   }
@@ -205,7 +205,7 @@ const getTaskByRole = async (req, res) => {
   const { createdBy, responsible, participant, observers } = req.query;
   try {
     if (!createdBy && !responsible && !participant && !observers) {
-      return res.status(400).json({ error: "err" });
+      return res.status(400).json({ error: "Error" });
     }
 
     const query = {};
@@ -251,7 +251,7 @@ const pauseTask = async (req, res) => {
     task.status = 2; // Set status to "Pending"
     const pausedTask = await task.save();
 
-    res.status(200).json(pausedTask);
+    res.status(200).json({success: "task paused"});
   } catch (error) {
     res.status(500).json({ error: "Failed to pause the task" });
   }
@@ -272,7 +272,7 @@ const renewTask = async (req, res) => {
     task.closedOn = null; // Reset closedOn to null
     const renewedTask = await task.save();
 
-    res.status(200).json(renewedTask);
+    res.status(200).json({success: "task renewed"});
   } catch (error) {
     res.status(500).json({ error: "Failed to renew the task" });
   }
@@ -292,7 +292,7 @@ const addResultFromComment = async (req, res) => {
     task.results.push(comment); // Add the comment to the task's results array
     const updatedTask = await task.save();
 
-    res.status(200).json(updatedTask);
+    res.status(200).json({success: "Comment added successfully"});
   } catch (error) {
     res
       .status(500)
@@ -312,9 +312,9 @@ const startTask = async (req, res) => {
     }
 
     task.status = 3; // Se t status to "In Progress"
-    const progressTask = await task.save();
+     await task.save();
 
-    res.status(200).json(progressTask);
+    res.status(200).json({success: "Task started..."});
   } catch (error) {
     res.status(500).json({ error: "Failed to pause the task" });
   }
@@ -333,7 +333,7 @@ const updateTask = async (req, res) => {
       return res.status(404).json({ error: "Task not found" });
     }
 
-    res.status(200).json(task);
+    res.status(200).json({success: "task updated Successfully"});
   } catch (error) {
     res.status(500).json({ error: "Failed to update task" });
   }
