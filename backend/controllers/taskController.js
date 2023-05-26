@@ -9,7 +9,10 @@ const addTask = async (req, res) => {
     taskData.createdBy = loggedInUserId; // Set the createdBy field with the user ID
     const task = new Task(taskData);
     const savedTask = await task.save();
-    res.status(201).json({status: "Task added Successfully"});
+    res.status(201).json({
+      message: "Task added Successfully",
+      // data:  savedTask,
+    });
   } catch (error) {
     res.status(500).json({ error: "Failed to create the task" });
   }
@@ -28,7 +31,7 @@ const completeTask = async (req, res) => {
     task.status = 5; // Set status to "Completed"
     const completedTask = await task.save();
 
-    res.status(200).json({status: "task completed"});
+    res.status(200).json({message: "Task completed"});
   } catch (error) {
     res.status(500).json({ error: "Failed to complete the task" });
   }
@@ -73,7 +76,7 @@ const getTaskData = async (req, res) => {
     // Return the task data in the response
     res.json({
       status: 200,
-      message: "success",
+      message: "Success",
       data: tasks,
     });
   } catch (error) {
@@ -154,8 +157,7 @@ const getTaskDataLast30Days = async (req, res) => {
     }
 
     res.json({
-      status: 200,
-      message: "success",
+      message: "Success",
       data: tasks,
     });
   } catch (error) {
@@ -189,8 +191,7 @@ const getTaskDataLast7Days = async (req, res) => {
     }
 
     res.json({
-      status: 200,
-      message: "success",
+      message: "Success",
       data: tasks,
     });
   } catch (error) {
@@ -333,7 +334,7 @@ const updateTask = async (req, res) => {
       return res.status(404).json({ error: "Task not found" });
     }
 
-    res.status(200).json({success: "task updated Successfully"});
+    res.status(200).json({success: "Task updated Successfully"});
   } catch (error) {
     res.status(500).json({ error: "Failed to update task" });
   }

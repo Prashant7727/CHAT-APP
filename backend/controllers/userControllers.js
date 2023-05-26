@@ -7,7 +7,10 @@ const getData = async (req, res, next) => {
   try {
     const users = await User.find();
     if (users.length > 0) {
-      res.send(users);
+      res.json({
+        message: "Success",
+        data: users,
+      });
     } else {
       res.send({ result: "no users found" });
     }
@@ -21,7 +24,11 @@ const getData = async (req, res, next) => {
 const getCurrentUserData = async (req, res, next) => {
   let result = await User.findById({ _id: req.params.id });
   if (result) {
-    res.send(result);
+    res.json({
+      status: 200,
+      message: "success",
+      data: result,
+    });
   } else {
     res.send({ result: "no record" });
   }
@@ -41,7 +48,10 @@ const allUsers = asyncHandler(async (req, res) => {
     : {};
 
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-  res.send(users);
+  res.json({
+    message: "Success",
+    data: users,
+  });
 });
 
 //@description     Register new user

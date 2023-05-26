@@ -10,7 +10,10 @@ const getClinicData = async (req, res, next) => {
   try {
     const users = await Clinic.find();
     if (users.length > 0) {
-      res.send(users);
+      res.json({
+        message: "Success",
+        data: users,
+      });
     } else {
       res.send({ result: "no ticket info. found" });
     }

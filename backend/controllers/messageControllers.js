@@ -11,7 +11,11 @@ const allMessages = async (req, res) => {
     const messages = await Message.find({ chat: req.params.chatId })
       .populate("sender", "name pic email")
       .populate("chat");
-    res.json(messages);
+      res.json({
+        status: 200,
+        message: "success",
+        data: messages,
+      });
   } catch (error) {
     res.status(400).json({ error: "error" });
   }

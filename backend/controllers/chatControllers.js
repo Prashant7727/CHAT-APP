@@ -65,7 +65,10 @@ const fetchChats = asyncHandler(async (req, res) => {
           path: "latestMessage.sender",
           select: "name pic email",
         });
-        res.status(200).send(results);
+        res.json({
+          message: "Success",
+          data: results,
+        });
       });
   } catch (error) {
     res.status(400).json({ error: "error" });
@@ -83,7 +86,10 @@ const getGroupChat = asyncHandler(async (req, res) => {
           path: "latestMessage.sender",
           select: "name pic email",
         });
-        res.status(200).send(results);
+        res.json({
+          message: "Success",
+          data: results,
+        });
       });
   } catch (error) {
     res.status(400).json({ error: "error" });
@@ -130,7 +136,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
     //   { $push: { chats: groupChat._id } }
     // );
 
-    res.status(200).json({status:"Group created Successfully"});
+    res.status(200).json({message:"Group created Successfully"});
   } catch (error) {
     res.status(400).json({ error: "error" });
   }
@@ -157,7 +163,10 @@ const renameGroup = asyncHandler(async (req, res) => {
   if (!updatedChat) {
     res.status(404).json({ error: "Chat not found" });
   } else {
-    res.json(updatedChat);
+    res.json({
+      message: "Success",
+      data: updatedChat,
+    });
   }
 });
 
@@ -184,7 +193,10 @@ const removeFromGroup = asyncHandler(async (req, res) => {
   if (!removed) {
     res.status(404).json({ error: "Chat not found" });
   } else {
-    res.json(removed);
+    res.json({
+      message: "Success",
+      data: removed,
+    });
   }
 });
 
@@ -211,7 +223,7 @@ const addToGroup = asyncHandler(async (req, res) => {
   if (!added) {
     res.status(404).json({ error: "Chat not found" });
   } else {
-    res.json({status:"User added successfully to the group"});
+    res.json({status:"User added in the group"});
   }
 });
 
