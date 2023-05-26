@@ -36,20 +36,23 @@ const sendMessage = asyncHandler(async (req, res) => {
 
   try {
     var message = await Message.create(newMessage);
-
-    message = await message.populate("sender").execPopulate();
-    message = await message.populate("chat").execPopulate();
-    message = await User.populate(message, {
-      path: "chat.users",
-      select: "name pic email",
-    });
-
+    message = await Message.findById(message._id)
+      .populate("sender")
+      .populate("chat")
+      .populate({
+        path: "chat.users",
+        select: "name pic email",
+      })
+      .exec();
+  
     await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
-
+  
     res.json(message);
   } catch (error) {
-    res.status(400).json({ error: "error" });
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while sending the message" });
   }
+  
 });
 
 module.exports = { allMessages, sendMessage };
